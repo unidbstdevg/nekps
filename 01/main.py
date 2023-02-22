@@ -1,4 +1,3 @@
-from pprint import pp
 import csv
 
 DATA_FILENAME = "data/my.csv"
@@ -37,10 +36,6 @@ def make_matrix(alts, f):
     r = init_matrix(N, N)
     for i in range(N):
         for j in range(N):
-            # if i == j:
-            #     r[i][j] = 0
-            #     continue
-
             alt1 = alts[i]
             alt2 = alts[j]
             r[i][j] = sum([f(a, b) for a, b in zip(alt1, alt2)])
@@ -58,15 +53,30 @@ def apply_f_to_2_matrix(a, b, f):
         ]
 
 
+def binarize(ar, threshold):
+    N = len(ar)
+
+    # yapf: disable
+    return [
+            [
+                0 if i == j else
+                (1 if ar[i][j] >= threshold
+                 else 0)
+                for j in range(N)
+            ]
+            for i in range(N)
+        ]
+
+
 alts = list(parse_csv(DATA_FILENAME).values())
 
 p10 = make_matrix(alts, lambda a, b: a if a != b else 0)
 p01 = make_matrix(alts, lambda a, b: b if a != b else 0)
 p11 = make_matrix(alts, lambda a, b: 1 if (a == 1 and b == 1) else 0)
 p00 = make_matrix(alts, lambda a, b: 0 if (a == 0 and b == 0) else 1)
-# pp(p01)
 
 H = apply_f_to_2_matrix(p11, p10, lambda x, y: round(x / (x + y), 2))
 G = apply_f_to_2_matrix(p11, p00, lambda x, y: round(x / y, 2))
 
-pp(G)
+bH = binarize(H, 0.9)
+bG = binarize(G, 0.8)
