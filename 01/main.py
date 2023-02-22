@@ -1,30 +1,42 @@
+import itertools
 import csv
 
 DATA_FILENAME = "data/my.csv"
 
 
 def parse_csv(filename):
+    """Returns attribute columns
+
+    File format:
+
+               name1   name2  ...
+    attr_name1 attrib  attrib ...
+    attr_name2 attrib  attrib ...
+    ...
+    """
+
     with open(filename, newline="") as csvfile:
         reader = csv.reader(csvfile, delimiter=",")
 
-        it = iter(reader)
-        # this is header
-        alts = next(it, None)
+        # skip header row
+        reader = itertools.islice(reader, 1, None)
+        # yes, transpose
+        reader = zip(*reader)
+        # skip column with attribute names
+        reader = itertools.islice(reader, 1, None)
 
-        alts = {x: [] for x in alts[1:] if x != ""}
+        # yapf: disable
+        return [
+                [
+                    int(attrib)
+                    for attrib in col
+                    # skip empty cells
+                    if attrib != ""
+                    ]
+                for col in reader
+                ]
 
-        for row in it:
-            # skip empty delimiter line
-            if row[0] == "":
-                continue
-
-            # skip attribute name
-            row = row[1:]
-
-            for attrib, alt in zip(row, alts.keys()):
-                alts[alt].append(int(attrib))
-
-    return alts
+    return None
 
 
 def make_matrix(alts, f):
@@ -63,7 +75,7 @@ def binarize(ar, threshold):
         ]
 
 
-alts = list(parse_csv(DATA_FILENAME).values())
+alts = parse_csv(DATA_FILENAME)
 
 p10 = make_matrix(alts, lambda a, b: a if a != b else 0)
 p01 = make_matrix(alts, lambda a, b: b if a != b else 0)
