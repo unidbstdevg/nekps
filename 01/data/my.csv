@@ -1,0 +1,35 @@
+,etalon,vim,emacs,nano,sublime,notepad
+text objects,1,1,0,0,0,0
+search,1,1,1,1,1,1
+replace,1,1,1,1,1,1
+regex,1,1,1,1,1,0
+blockwise edit,1,1,0,0,0,0
+marks,1,1,1,0,0,0
+registers,1,1,1,0,0,0
+undo history,1,1,1,1,1,0
+completion,1,1,1,0,1,0
+commands,1,1,1,0,0,0
+,,,,,,
+different modes,1,1,1,0,0,0
+binds,1,1,1,1,1,0
+key-sequenced binds,1,1,0,0,0,0
+config,1,1,1,1,1,0
+plain-text config,1,1,1,1,0,0
+plugins,1,1,1,0,1,0
+lsp support,1,1,1,0,1,0
+embeddable,1,1,1,0,0,0
+,,,,,,
+crossplatform,1,1,1,1,1,0
+open source,1,1,1,1,0,0
+preinstalled,1,1,0,0,0,1
+,,,,,,
+gui,1,1,1,0,1,1
+console interface,1,1,1,1,0,0
+tabs,1,1,1,1,1,0
+window split,1,1,1,0,1,0
+syntax highlight,1,1,1,1,1,0
+themes,1,1,1,0,1,0
+statusline,1,1,1,1,1,1
+customize statusline,1,1,1,0,0,0
+line number,1,1,1,1,1,0
+fold,1,1,1,0,0,0
