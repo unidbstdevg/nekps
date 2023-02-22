@@ -47,25 +47,14 @@ def make_matrix(alts, f):
     return r
 
 
-def calc_H(p11, p10):
+def apply_f_to_2_matrix(a, b, f):
     # yapf: disable
     return [
             [
-                round(x / (x + y), 2)
+                f(x, y)
                 for x, y in zip(row1, row2)
             ]
-            for row1, row2 in zip(p11, p10)
-        ]
-
-
-def calc_G(p11, p00):
-    # yapf: disable
-    return [
-            [
-                round(x / y, 2)
-                for x, y in zip(row1, row2)
-            ]
-            for row1, row2 in zip(p11, p00)
+            for row1, row2 in zip(a, b)
         ]
 
 
@@ -77,8 +66,7 @@ p11 = make_matrix(alts, lambda a, b: 1 if (a == 1 and b == 1) else 0)
 p00 = make_matrix(alts, lambda a, b: 0 if (a == 0 and b == 0) else 1)
 # pp(p01)
 
-
-H = calc_H(p11, p10)
-G = calc_G(p11, p00)
+H = apply_f_to_2_matrix(p11, p10, lambda x, y: round(x / (x + y), 2))
+G = apply_f_to_2_matrix(p11, p00, lambda x, y: round(x / y, 2))
 
 pp(G)
