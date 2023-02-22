@@ -27,19 +27,14 @@ def parse_csv(filename):
     return alts
 
 
-def init_matrix(n, m):
-    return [[-1 for _ in range(n)] for _ in range(m)]
-
-
 def make_matrix(alts, f):
-    N = len(alts)
-    r = init_matrix(N, N)
-    for i in range(N):
-        for j in range(N):
-            alt1 = alts[i]
-            alt2 = alts[j]
-            r[i][j] = sum([f(a, b) for a, b in zip(alt1, alt2)])
-    return r
+    # yapf: disable
+    return [
+            [
+                sum([f(a, b) for a, b in zip(alt1, alt2)])
+                for alt2 in alts]
+            for alt1 in alts
+        ]
 
 
 def apply_f_to_2_matrix(a, b, f):
