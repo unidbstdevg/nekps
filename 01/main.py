@@ -87,3 +87,8 @@ G = apply_f_to_2_matrix(p11, p00, lambda x, y: round(x / y, 2))
 
 bH = binarize(H, 0.9)
 bG = binarize(G, 0.8)
+
+print("bH:")
+[print(*row) for row in bH]
+print("\nbG:")
+[print(*row) for row in bG]
