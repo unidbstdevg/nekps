@@ -1,11 +1,14 @@
 import itertools
 import csv
+import os
+
+import graph
 
 DATA_FILENAME = "data/my.csv"
 
 
 def parse_csv(filename):
-    """Returns attribute columns
+    """Returns tuple of (header_row and attribute_columns)
 
     File format:
 
@@ -18,23 +21,25 @@ def parse_csv(filename):
     with open(filename, newline="") as csvfile:
         reader = csv.reader(csvfile, delimiter=",")
 
-        # skip header row
-        reader = itertools.islice(reader, 1, None)
+        headers = next(reader)[1:]
+
         # yes, transpose
         reader = zip(*reader)
         # skip column with attribute names
         reader = itertools.islice(reader, 1, None)
 
         # yapf: disable
-        return [
+        atrib_columns = [
                 [
                     int(attrib)
                     for attrib in col
                     # skip empty cells
                     if attrib != ""
-                    ]
-                for col in reader
                 ]
+                for col in reader
+            ]
+
+        return (headers, atrib_columns)
 
     return None
 
@@ -44,7 +49,8 @@ def make_matrix(alts, f):
     return [
             [
                 sum([f(a, b) for a, b in zip(alt1, alt2)])
-                for alt2 in alts]
+                for alt2 in alts
+            ]
             for alt1 in alts
         ]
 
@@ -75,7 +81,7 @@ def binarize(ar, threshold):
         ]
 
 
-alts = parse_csv(DATA_FILENAME)
+headers, alts = parse_csv(DATA_FILENAME)
 
 p10 = make_matrix(alts, lambda a, b: a if a != b else 0)
 p01 = make_matrix(alts, lambda a, b: b if a != b else 0)
@@ -92,3 +98,7 @@ print("bH:")
 [print(*row) for row in bH]
 print("\nbG:")
 [print(*row) for row in bG]
+
+os.makedirs("out/", exist_ok=True)
+graph.draw(bH, headers, "out/0_bH.png", directed=True)
+graph.draw(bG, headers, "out/1_bG.png", directed=False)
